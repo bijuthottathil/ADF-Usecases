@@ -22,5 +22,6 @@ ADF Usecases
    ![image](https://github.com/user-attachments/assets/7703798d-1949-46ee-8b49-b76d5f6e35ee)
 
 
+# Parmeterized Dataset - Copying Azure SQL tables data to ADLS
 
 
