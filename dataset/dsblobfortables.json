@@ -1,16 +1,25 @@
 {
-	"name": "dsjsontransformedtocsv",
+	"name": "dsblobfortables",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "lnk_destinationjsontransformed",
+			"referenceName": "AzureBlobStorage1",
 			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"filename": {
+				"type": "string"
+			}
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation",
-				"fileSystem": "csv"
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().filename",
+					"type": "Expression"
+				},
+				"container": "tableoutput"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
