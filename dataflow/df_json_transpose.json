@@ -27,6 +27,9 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     fileDate as string (concat(\"Biju\",\"raj\"))",
+				"}",
 				"source(output(",
 				"          {_id} as string,",
 				"          average_rating as string,",
@@ -76,6 +79,7 @@
 				"     skipDuplicateMapOutputs: false) ~> flattenjsonfile",
 				"flattenjsonfile sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     filePattern:($fileDate),",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
