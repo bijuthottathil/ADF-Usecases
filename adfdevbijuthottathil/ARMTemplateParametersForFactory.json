@@ -5,11 +5,26 @@
 		"factoryName": {
 			"value": "adfdevbijuthottathil"
 		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"LS_AzureSQLSourcetables_password": {
+			"value": ""
+		},
 		"lnk_destinationjsontransformed_accountKey": {
 			"value": ""
 		},
 		"lnkjsondatasource_accountKey": {
 			"value": ""
+		},
+		"LS_AzureSQLSourcetables_properties_typeProperties_server": {
+			"value": "portfolio-db.database.windows.net"
+		},
+		"LS_AzureSQLSourcetables_properties_typeProperties_database": {
+			"value": "portfolio-db"
+		},
+		"LS_AzureSQLSourcetables_properties_typeProperties_userName": {
+			"value": "sqladmin"
 		},
 		"lnk_destinationjsontransformed_properties_typeProperties_url": {
 			"value": "https://adlsusecasesstore.dfs.core.windows.net/"

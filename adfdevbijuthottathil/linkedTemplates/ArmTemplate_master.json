@@ -7,6 +7,14 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adfdevbijuthottathil"
 		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"LS_AzureSQLSourcetables_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_AzureSQLSourcetables'"
+		},
 		"lnk_destinationjsontransformed_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'lnk_destinationjsontransformed'"
@@ -14,6 +22,18 @@
 		"lnkjsondatasource_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'lnkjsondatasource'"
+		},
+		"LS_AzureSQLSourcetables_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "portfolio-db.database.windows.net"
+		},
+		"LS_AzureSQLSourcetables_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "portfolio-db"
+		},
+		"LS_AzureSQLSourcetables_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sqladmin"
 		},
 		"lnk_destinationjsontransformed_properties_typeProperties_url": {
 			"type": "string",
@@ -50,11 +70,26 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"AzureBlobStorage1_connectionString": {
+						"value": "[parameters('AzureBlobStorage1_connectionString')]"
+					},
+					"LS_AzureSQLSourcetables_password": {
+						"value": "[parameters('LS_AzureSQLSourcetables_password')]"
+					},
 					"lnk_destinationjsontransformed_accountKey": {
 						"value": "[parameters('lnk_destinationjsontransformed_accountKey')]"
 					},
 					"lnkjsondatasource_accountKey": {
 						"value": "[parameters('lnkjsondatasource_accountKey')]"
+					},
+					"LS_AzureSQLSourcetables_properties_typeProperties_server": {
+						"value": "[parameters('LS_AzureSQLSourcetables_properties_typeProperties_server')]"
+					},
+					"LS_AzureSQLSourcetables_properties_typeProperties_database": {
+						"value": "[parameters('LS_AzureSQLSourcetables_properties_typeProperties_database')]"
+					},
+					"LS_AzureSQLSourcetables_properties_typeProperties_userName": {
+						"value": "[parameters('LS_AzureSQLSourcetables_properties_typeProperties_userName')]"
 					},
 					"lnk_destinationjsontransformed_properties_typeProperties_url": {
 						"value": "[parameters('lnk_destinationjsontransformed_properties_typeProperties_url')]"
