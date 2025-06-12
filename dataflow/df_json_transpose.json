@@ -9,7 +9,7 @@
 						"referenceName": "ds_jsonsource",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "jsonsourcefiles"
 				}
 			],
 			"sinks": [
@@ -18,12 +18,12 @@
 						"referenceName": "dsjsontransformedtocsv",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "copyingtocsvfiles"
 				}
 			],
 			"transformations": [
 				{
-					"name": "flatten1"
+					"name": "flattenjsonfile"
 				}
 			],
 			"scriptLines": [
@@ -50,8 +50,8 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'arrayOfDocuments') ~> source1",
-				"source1 foldDown(unroll(images, images),",
+				"     documentForm: 'arrayOfDocuments') ~> jsonsourcefiles",
+				"jsonsourcefiles foldDown(unroll(images, images),",
 				"     mapColumn(",
 				"          {_id},",
 				"          average_rating,",
@@ -73,14 +73,14 @@
 				"          verified_purchase",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flatten1 sink(allowSchemaDrift: true,",
+				"     skipDuplicateMapOutputs: false) ~> flattenjsonfile",
+				"flattenjsonfile sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true) ~> copyingtocsvfiles"
 			]
 		}
 	}
