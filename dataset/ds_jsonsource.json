@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "nestedarray.json",
 				"folderPath": "source",
 				"fileSystem": "json"
 			}
@@ -17,62 +18,29 @@
 		"schema": {
 			"type": "object",
 			"properties": {
-				"_id": {
+				"id": {
 					"type": "string"
 				},
-				"average_rating": {
+				"name": {
 					"type": "string"
 				},
 				"category": {
 					"type": "string"
 				},
-				"crawled_at": {
-					"type": "string"
+				"price": {
+					"type": "number"
 				},
-				"description": {
-					"type": "string"
+				"rating": {
+					"type": "number"
 				},
-				"dislikes": {
-					"type": "string"
+				"inStock": {
+					"type": "boolean"
 				},
-				"images": {
+				"features": {
 					"type": "array",
 					"items": {
 						"type": "string"
 					}
-				},
-				"likes": {
-					"type": "string"
-				},
-				"location": {
-					"type": "string"
-				},
-				"price": {
-					"type": "string"
-				},
-				"product": {
-					"type": "string"
-				},
-				"rating": {
-					"type": "string"
-				},
-				"review_title": {
-					"type": "string"
-				},
-				"review_uniq_id": {
-					"type": "string"
-				},
-				"reviewed_at": {
-					"type": "string"
-				},
-				"reviewed_by": {
-					"type": "string"
-				},
-				"url": {
-					"type": "string"
-				},
-				"verified_purchase": {
-					"type": "boolean"
 				}
 			}
 		}
