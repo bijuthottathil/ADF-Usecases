@@ -3,8 +3,8 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
-				"type": "Copy",
+				"name": "Data flow1",
+				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -15,192 +15,16 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "JsonSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"wildcardFileName": "*.json",
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "JsonReadSettings"
-						}
+					"dataflow": {
+						"referenceName": "df_json_transpose",
+						"type": "DataFlowReference"
 					},
-					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
-						}
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
 					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"path": "$['_id']"
-								},
-								"sink": {
-									"name": "_id"
-								}
-							},
-							{
-								"source": {
-									"path": "$['average_rating']"
-								},
-								"sink": {
-									"name": "average_rating"
-								}
-							},
-							{
-								"source": {
-									"path": "$['category']"
-								},
-								"sink": {
-									"name": "category"
-								}
-							},
-							{
-								"source": {
-									"path": "$['crawled_at']"
-								},
-								"sink": {
-									"name": "crawled_at"
-								}
-							},
-							{
-								"source": {
-									"path": "$['description']"
-								},
-								"sink": {
-									"name": "description"
-								}
-							},
-							{
-								"source": {
-									"path": "$['dislikes']"
-								},
-								"sink": {
-									"name": "dislikes"
-								}
-							},
-							{
-								"source": {
-									"path": "$['images'][0]"
-								},
-								"sink": {
-									"name": "items"
-								}
-							},
-							{
-								"source": {
-									"path": "$['likes']"
-								},
-								"sink": {
-									"name": "likes"
-								}
-							},
-							{
-								"source": {
-									"path": "$['location']"
-								},
-								"sink": {
-									"name": "location"
-								}
-							},
-							{
-								"source": {
-									"path": "$['price']"
-								},
-								"sink": {
-									"name": "price"
-								}
-							},
-							{
-								"source": {
-									"path": "$['product']"
-								},
-								"sink": {
-									"name": "product"
-								}
-							},
-							{
-								"source": {
-									"path": "$['rating']"
-								},
-								"sink": {
-									"name": "rating"
-								}
-							},
-							{
-								"source": {
-									"path": "$['review_title']"
-								},
-								"sink": {
-									"name": "review_title"
-								}
-							},
-							{
-								"source": {
-									"path": "$['review_uniq_id']"
-								},
-								"sink": {
-									"name": "review_uniq_id"
-								}
-							},
-							{
-								"source": {
-									"path": "$['reviewed_at']"
-								},
-								"sink": {
-									"name": "reviewed_at"
-								}
-							},
-							{
-								"source": {
-									"path": "$['reviewed_by']"
-								},
-								"sink": {
-									"name": "reviewed_by"
-								}
-							},
-							{
-								"source": {
-									"path": "$['url']"
-								},
-								"sink": {
-									"name": "url"
-								}
-							},
-							{
-								"source": {
-									"path": "$['verified_purchase']"
-								},
-								"sink": {
-									"name": "verified_purchase"
-								}
-							}
-						]
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "ds_jsonsource",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "dsjsontransformedtocsv",
-						"type": "DatasetReference"
-					}
-				]
+					"traceLevel": "Fine"
+				}
 			}
 		],
 		"annotations": []
