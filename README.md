@@ -15,6 +15,9 @@ ADF Usecases
 
    ![image](https://github.com/user-attachments/assets/c249bcb0-b4c7-46de-a7c8-b7436e44e123)
    ![image](https://github.com/user-attachments/assets/35ba6099-d7f2-4d32-9174-9cf3c7f86ec8)
+
+   Flatten setting is here  ![image](https://github.com/user-attachments/assets/fb34a50c-1d7b-4309-bbce-7e78fff716b8)
+
    Result is transformed to below csv
    ![image](https://github.com/user-attachments/assets/7703798d-1949-46ee-8b49-b76d5f6e35ee)
 
