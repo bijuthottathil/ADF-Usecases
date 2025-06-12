@@ -1,9 +1,9 @@
 {
-	"name": "pipeline1",
+	"name": "Copy nested json to csv",
 	"properties": {
 		"activities": [
 			{
-				"name": "Data flow1",
+				"name": "df_json_to_csv",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
