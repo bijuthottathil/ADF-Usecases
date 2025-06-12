@@ -1,0 +1,81 @@
+{
+	"name": "ds_jsonsource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnkjsondatasource",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "test.json",
+				"folderPath": "source",
+				"fileSystem": "json"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"_id": {
+					"type": "string"
+				},
+				"average_rating": {
+					"type": "string"
+				},
+				"category": {
+					"type": "string"
+				},
+				"crawled_at": {
+					"type": "string"
+				},
+				"description": {
+					"type": "string"
+				},
+				"dislikes": {
+					"type": "string"
+				},
+				"images": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"likes": {
+					"type": "string"
+				},
+				"location": {
+					"type": "string"
+				},
+				"price": {
+					"type": "string"
+				},
+				"product": {
+					"type": "string"
+				},
+				"rating": {
+					"type": "string"
+				},
+				"review_title": {
+					"type": "string"
+				},
+				"review_uniq_id": {
+					"type": "string"
+				},
+				"reviewed_at": {
+					"type": "string"
+				},
+				"reviewed_by": {
+					"type": "string"
+				},
+				"url": {
+					"type": "string"
+				},
+				"verified_purchase": {
+					"type": "boolean"
+				}
+			}
+		}
+	}
+}
