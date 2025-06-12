@@ -17,7 +17,10 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "df_json_transpose",
-						"type": "DataFlowReference"
+						"type": "DataFlowReference",
+						"parameters": {
+							"fileDate": "concat(\"Biju\",\"raj\")"
+						}
 					},
 					"compute": {
 						"coreCount": 8,
