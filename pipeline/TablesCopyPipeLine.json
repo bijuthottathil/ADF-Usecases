@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT *\nFROM INFORMATION_SCHEMA.TABLES\nWHERE TABLE_NAME in ( 'Customer','Product') and table_schema='SalesLT'",
+						"sqlReaderQuery": "\nSELECT *\nFROM INFORMATION_SCHEMA.TABLES\nWHERE TABLE_NAME in ( 'Customer','Product')",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -36,7 +36,7 @@
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "Foreachtable",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -52,7 +52,6 @@
 						"value": "@activity('LookupTables').output.value",
 						"type": "Expression"
 					},
-					"isSequential": true,
 					"activities": [
 						{
 							"name": "Copy data1",
@@ -75,12 +74,12 @@
 								"sink": {
 									"type": "DelimitedTextSink",
 									"storeSettings": {
-										"type": "AzureBlobFSWriteSettings"
+										"type": "AzureBlobStorageWriteSettings"
 									},
 									"formatSettings": {
 										"type": "DelimitedTextWriteSettings",
 										"quoteAllText": true,
-										"fileExtension": ".csv"
+										"fileExtension": ".txt"
 									}
 								},
 								"enableStaging": false,
@@ -99,7 +98,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"tablename": {
-											"value": "@item().tablename",
+											"value": "@item().table_name",
 											"type": "Expression"
 										},
 										"schema": {
@@ -111,8 +110,14 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "dsjsontransformedtocsv",
-									"type": "DatasetReference"
+									"referenceName": "dsblobfortables",
+									"type": "DatasetReference",
+									"parameters": {
+										"filename": {
+											"value": "@concat(item().table_name,'.','csv')",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
