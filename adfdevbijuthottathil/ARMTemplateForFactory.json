@@ -90,6 +90,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"fileName": "nestedarray.json",
 						"folderPath": "source",
 						"fileSystem": "json"
 					}
@@ -97,62 +98,29 @@
 				"schema": {
 					"type": "object",
 					"properties": {
-						"_id": {
+						"id": {
 							"type": "string"
 						},
-						"average_rating": {
+						"name": {
 							"type": "string"
 						},
 						"category": {
 							"type": "string"
 						},
-						"crawled_at": {
-							"type": "string"
+						"price": {
+							"type": "number"
 						},
-						"description": {
-							"type": "string"
+						"rating": {
+							"type": "number"
 						},
-						"dislikes": {
-							"type": "string"
+						"inStock": {
+							"type": "boolean"
 						},
-						"images": {
+						"features": {
 							"type": "array",
 							"items": {
 								"type": "string"
 							}
-						},
-						"likes": {
-							"type": "string"
-						},
-						"location": {
-							"type": "string"
-						},
-						"price": {
-							"type": "string"
-						},
-						"product": {
-							"type": "string"
-						},
-						"rating": {
-							"type": "string"
-						},
-						"review_title": {
-							"type": "string"
-						},
-						"review_uniq_id": {
-							"type": "string"
-						},
-						"reviewed_at": {
-							"type": "string"
-						},
-						"reviewed_by": {
-							"type": "string"
-						},
-						"url": {
-							"type": "string"
-						},
-						"verified_purchase": {
-							"type": "boolean"
 						}
 					}
 				}
@@ -258,55 +226,32 @@
 						"     fileDate as string (concat(\"Biju\",\"raj\"))",
 						"}",
 						"source(output(",
-						"          {_id} as string,",
-						"          average_rating as string,",
+						"          id as string,",
+						"          name as string,",
 						"          category as string,",
-						"          crawled_at as string,",
-						"          description as string,",
-						"          dislikes as string,",
-						"          images as string[],",
-						"          likes as string,",
-						"          location as string,",
-						"          price as string,",
-						"          product as string,",
-						"          rating as string,",
-						"          review_title as string,",
-						"          review_uniq_id as string,",
-						"          reviewed_at as string,",
-						"          reviewed_by as string,",
-						"          url as string,",
-						"          verified_purchase as boolean",
+						"          price as double,",
+						"          rating as double,",
+						"          inStock as boolean,",
+						"          features as string[]",
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false,",
 						"     documentForm: 'arrayOfDocuments') ~> jsonsourcefiles",
-						"jsonsourcefiles foldDown(unroll(images, images),",
+						"jsonsourcefiles foldDown(unroll(features),",
 						"     mapColumn(",
-						"          {_id},",
-						"          average_rating,",
+						"          id,",
+						"          name,",
 						"          category,",
-						"          crawled_at,",
-						"          description,",
-						"          dislikes,",
-						"          images,",
-						"          likes,",
-						"          location,",
 						"          price,",
-						"          product,",
 						"          rating,",
-						"          review_title,",
-						"          review_uniq_id,",
-						"          reviewed_at,",
-						"          reviewed_by,",
-						"          url,",
-						"          verified_purchase",
+						"          inStock,",
+						"          features",
 						"     ),",
 						"     skipDuplicateMapInputs: false,",
 						"     skipDuplicateMapOutputs: false) ~> flattenjsonfile",
 						"flattenjsonfile sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     filePattern:'Review_data',",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
