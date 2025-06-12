@@ -25,3 +25,13 @@ ADF Usecases
 # Parmeterized Dataset - Copying Azure SQL tables data to ADLS
 
 
+1. Intend is to copy below table data to csv format in container
+2. ![image](https://github.com/user-attachments/assets/f627c901-7453-424d-ae10-1f9e84845078)
+3. ![image](https://github.com/user-attachments/assets/c0fae2de-29d0-4d07-84bd-0a598ee6a2d6)
+4. ![image](https://github.com/user-attachments/assets/abb063e7-b57c-4c02-8263-d537ae48267c)
+5. ![image](https://github.com/user-attachments/assets/43765663-ef57-4079-aa07-de478a5d478a)
+6. ![image](https://github.com/user-attachments/assets/d4d6b97a-d266-41e6-aa99-ed6a1f0293d9)
+
+
+
+
