@@ -1,0 +1,23 @@
+{
+	"name": "dsjsontransformedtocsv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_destinationjsontransformed",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "destination",
+				"fileSystem": "json"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
