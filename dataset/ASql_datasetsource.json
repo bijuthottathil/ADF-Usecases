@@ -1,5 +1,5 @@
 {
-	"name": "ASql_dataset",
+	"name": "ASql_datasetsource",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LS_AzureSQLSourcetables",
