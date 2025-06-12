@@ -1,0 +1,9 @@
+{
+	"name": "adfdevbijuthottathil",
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "83c65efb-70a6-436b-b7ba-6b6380925f7b",
+		"tenantId": "50c70d3e-8356-4111-82d3-3fb1deae449b"
+	}
+}
