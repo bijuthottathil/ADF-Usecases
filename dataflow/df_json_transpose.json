@@ -79,7 +79,7 @@
 				"     skipDuplicateMapOutputs: false) ~> flattenjsonfile",
 				"flattenjsonfile sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     filePattern:($fileDate),",
+				"     filePattern:'',",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
