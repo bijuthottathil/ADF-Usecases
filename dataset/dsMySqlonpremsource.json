@@ -1,0 +1,15 @@
+{
+	"name": "dsMySqlonpremsource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnkMySqlonpremsource",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "MySqlTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "`inventory`"
+		}
+	}
+}

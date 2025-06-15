@@ -1,0 +1,12 @@
+{
+	"name": "dspostgresazure",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnkPostgreSqlAzure",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzurePostgreSqlTable",
+		"schema": []
+	}
+}
