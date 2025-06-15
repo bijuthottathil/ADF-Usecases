@@ -160,7 +160,7 @@
 				}
 			},
 			{
-				"name": "Copy data1",
+				"name": "Copy incrimental data to finaltable",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -188,7 +188,7 @@
 						"type": "AzurePostgreSqlSink",
 						"writeBatchSize": 1000000,
 						"writeBatchTimeout": "00:30:00",
-						"preCopyScript": "INSERT INTO public.inventory (item_id, product_name, category, quantity, price, last_updated)\nSELECT\n    stg.item_id,\n    stg.product_name,\n    stg.category,\n    stg.quantity,\n    stg.price,\n    stg.last_updated\nFROM\n    public.inventory_staging AS stg\nON CONFLICT (item_id) DO UPDATE SET \n    product_name = EXCLUDED.product_name,\n    category = EXCLUDED.category,\n    quantity = EXCLUDED.quantity,\n    price = EXCLUDED.price,\n    last_updated = EXCLUDED.last_updated;\n\n\nTRUNCATE TABLE public.inventory_staging;",
+						"preCopyScript": "INSERT INTO public.inventory (item_id, product_name, category, quantity, price, last_updated)\nSELECT\n    stg.item_id,\n    stg.product_name,\n    stg.category,\n    stg.quantity,\n    stg.price,\n    stg.last_updated\nFROM\n    public.inventory_staging AS stg\nON CONFLICT (item_id) DO UPDATE SET \n    product_name = EXCLUDED.product_name,\n    category = EXCLUDED.category,\n    quantity = EXCLUDED.quantity,\n    price = EXCLUDED.price,\n    last_updated = EXCLUDED.last_updated;\n\n\nTRUNCATE TABLE public.inventory_staging;\nupdate public.watermarktable set watermarkvalue=NOW()\n",
 						"writeMethod": "CopyCommand"
 					},
 					"enableStaging": false,
@@ -213,26 +213,6 @@
 						"type": "DatasetReference"
 					}
 				]
-			},
-			{
-				"name": "Stored procedure1",
-				"type": "SqlServerStoredProcedure",
-				"dependsOn": [
-					{
-						"activity": "Copy data1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": []
 			}
 		],
 		"annotations": []
