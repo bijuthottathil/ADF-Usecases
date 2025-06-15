@@ -11,6 +11,12 @@
 		"LS_AzureSQLSourcetables_password": {
 			"value": ""
 		},
+		"lnkMySqlonpremsource_password": {
+			"value": ""
+		},
+		"lnkPostgreSqlAzure_password": {
+			"value": ""
+		},
 		"lnk_destinationjsontransformed_accountKey": {
 			"value": ""
 		},
@@ -25,6 +31,24 @@
 		},
 		"LS_AzureSQLSourcetables_properties_typeProperties_userName": {
 			"value": "sqladmin"
+		},
+		"lnkMySqlonpremsource_properties_typeProperties_server": {
+			"value": "localhost"
+		},
+		"lnkMySqlonpremsource_properties_typeProperties_database": {
+			"value": "mysqldb"
+		},
+		"lnkMySqlonpremsource_properties_typeProperties_username": {
+			"value": "biju"
+		},
+		"lnkPostgreSqlAzure_properties_typeProperties_server": {
+			"value": "postgresserver-migration.postgres.database.azure.com"
+		},
+		"lnkPostgreSqlAzure_properties_typeProperties_database": {
+			"value": "postgres"
+		},
+		"lnkPostgreSqlAzure_properties_typeProperties_username": {
+			"value": "bijupostgres"
 		},
 		"lnk_destinationjsontransformed_properties_typeProperties_url": {
 			"value": "https://adlsusecasesstore.dfs.core.windows.net/"

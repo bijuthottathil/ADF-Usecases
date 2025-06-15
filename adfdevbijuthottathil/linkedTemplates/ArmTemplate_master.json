@@ -15,6 +15,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'LS_AzureSQLSourcetables'"
 		},
+		"lnkMySqlonpremsource_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'lnkMySqlonpremsource'"
+		},
+		"lnkPostgreSqlAzure_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'lnkPostgreSqlAzure'"
+		},
 		"lnk_destinationjsontransformed_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'lnk_destinationjsontransformed'"
@@ -34,6 +42,30 @@
 		"LS_AzureSQLSourcetables_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "sqladmin"
+		},
+		"lnkMySqlonpremsource_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "localhost"
+		},
+		"lnkMySqlonpremsource_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "mysqldb"
+		},
+		"lnkMySqlonpremsource_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "biju"
+		},
+		"lnkPostgreSqlAzure_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "postgresserver-migration.postgres.database.azure.com"
+		},
+		"lnkPostgreSqlAzure_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "postgres"
+		},
+		"lnkPostgreSqlAzure_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "bijupostgres"
 		},
 		"lnk_destinationjsontransformed_properties_typeProperties_url": {
 			"type": "string",
@@ -82,6 +114,12 @@
 					"lnkjsondatasource_accountKey": {
 						"value": "[parameters('lnkjsondatasource_accountKey')]"
 					},
+					"lnkMySqlonpremsource_password": {
+						"value": "[parameters('lnkMySqlonpremsource_password')]"
+					},
+					"lnkPostgreSqlAzure_password": {
+						"value": "[parameters('lnkPostgreSqlAzure_password')]"
+					},
 					"LS_AzureSQLSourcetables_properties_typeProperties_server": {
 						"value": "[parameters('LS_AzureSQLSourcetables_properties_typeProperties_server')]"
 					},
@@ -96,6 +134,24 @@
 					},
 					"lnkjsondatasource_properties_typeProperties_url": {
 						"value": "[parameters('lnkjsondatasource_properties_typeProperties_url')]"
+					},
+					"lnkMySqlonpremsource_properties_typeProperties_server": {
+						"value": "[parameters('lnkMySqlonpremsource_properties_typeProperties_server')]"
+					},
+					"lnkMySqlonpremsource_properties_typeProperties_database": {
+						"value": "[parameters('lnkMySqlonpremsource_properties_typeProperties_database')]"
+					},
+					"lnkMySqlonpremsource_properties_typeProperties_username": {
+						"value": "[parameters('lnkMySqlonpremsource_properties_typeProperties_username')]"
+					},
+					"lnkPostgreSqlAzure_properties_typeProperties_server": {
+						"value": "[parameters('lnkPostgreSqlAzure_properties_typeProperties_server')]"
+					},
+					"lnkPostgreSqlAzure_properties_typeProperties_database": {
+						"value": "[parameters('lnkPostgreSqlAzure_properties_typeProperties_database')]"
+					},
+					"lnkPostgreSqlAzure_properties_typeProperties_username": {
+						"value": "[parameters('lnkPostgreSqlAzure_properties_typeProperties_username')]"
 					}
 				}
 			},
