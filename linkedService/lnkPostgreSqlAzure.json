@@ -1,0 +1,22 @@
+{
+	"name": "lnkPostgreSqlAzure",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzurePostgreSql",
+		"version": "2.0",
+		"typeProperties": {
+			"server": "postgresserver-migration.postgres.database.azure.com",
+			"port": 5432,
+			"database": "postgres",
+			"sslMode": 2,
+			"username": "bijupostgres",
+			"authenticationType": "Basic",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI1MDU5OWFhOC1lMWMxLTQ2MjctOGRlOS02OTc1M2QxN2RjMjgiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "migrationIR",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
