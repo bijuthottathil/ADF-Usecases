@@ -1,11 +1,18 @@
 {
-	"name": "migratemysqltopostgres",
+	"name": "Copy_Inventory_Incremental_Upsert",
 	"properties": {
 		"activities": [
 			{
-				"name": "copyinventorytable",
+				"name": "copyinventorystagingtable",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "LookupOldWatermark",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -17,12 +24,16 @@
 				"typeProperties": {
 					"source": {
 						"type": "MySqlSource",
-						"query": "select * from mysqldb.inventory"
+						"query": {
+							"value": "SELECT\n    item_id,\n    product_name,\n    category,\n    quantity,\n    price,\n    last_updated\nFROM\n    inventory\n    last_updated > '@{activity('LookupOldWatermark').output.firstRow.watermarkvalue}'\nORDER BY last_updated ASC;\n",
+							"type": "Expression"
+						}
 					},
 					"sink": {
 						"type": "AzurePostgreSqlSink",
 						"writeBatchSize": 1000000,
 						"writeBatchTimeout": "00:30:00",
+						"preCopyScript": "truncate table inventory_staging ",
 						"writeMethod": "CopyCommand"
 					},
 					"enableStaging": false,
@@ -117,10 +128,52 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "dspostgresazure",
+						"referenceName": "dspostgrestagingazure",
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "LookupOldWatermark",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzurePostgreSqlSource",
+						"query": "SELECT watermarkvalue FROM public.watermarktable WHERE tablename = 'inventory';",
+						"partitionOption": "None",
+						"queryTimeout": "02:00:00"
+					},
+					"dataset": {
+						"referenceName": "dspostgresazure",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "copyinventorystagingtable",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
 			}
 		],
 		"annotations": []
