@@ -25,7 +25,7 @@
 					"source": {
 						"type": "MySqlSource",
 						"query": {
-							"value": "SELECT\n    item_id,\n    product_name,\n    category,\n    quantity,\n    price,\n    last_updated\nFROM\n    inventory\n    last_updated > '@{activity('LookupOldWatermark').output.firstRow.watermarkvalue}'\nORDER BY last_updated ASC;\n",
+							"value": "SELECT\n    item_id,\n    product_name,\n    category,\n    quantity,\n    price,\n    last_updated\nFROM\n    inventory\nWHERE\n    last_updated > CURDATE() - INTERVAL 1 DAY\nORDER BY last_updated ASC;\n",
 							"type": "Expression"
 						}
 					},
@@ -160,20 +160,79 @@
 				}
 			},
 			{
-				"name": "Wait1",
-				"type": "Wait",
+				"name": "Copy data1",
+				"type": "Copy",
 				"dependsOn": [
 					{
 						"activity": "copyinventorystagingtable",
 						"dependencyConditions": [
-							"Failed"
+							"Succeeded"
 						]
 					}
 				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"waitTimeInSeconds": 1
-				}
+					"source": {
+						"type": "AzurePostgreSqlSource",
+						"partitionOption": "None",
+						"queryTimeout": "02:00:00"
+					},
+					"sink": {
+						"type": "AzurePostgreSqlSink",
+						"writeBatchSize": 1000000,
+						"writeBatchTimeout": "00:30:00",
+						"preCopyScript": "INSERT INTO public.inventory (item_id, product_name, category, quantity, price, last_updated)\nSELECT\n    stg.item_id,\n    stg.product_name,\n    stg.category,\n    stg.quantity,\n    stg.price,\n    stg.last_updated\nFROM\n    public.inventory_staging AS stg\nON CONFLICT (item_id) DO UPDATE SET \n    product_name = EXCLUDED.product_name,\n    category = EXCLUDED.category,\n    quantity = EXCLUDED.quantity,\n    price = EXCLUDED.price,\n    last_updated = EXCLUDED.last_updated;\n\n\nTRUNCATE TABLE public.inventory_staging;",
+						"writeMethod": "CopyCommand"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "dspostgresstagingtable",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dspostgrestagingazure",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Stored procedure1",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": []
 			}
 		],
 		"annotations": []
