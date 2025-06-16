@@ -5,6 +5,8 @@
 			{
 				"name": "mysqlincrimentcopypipeline",
 				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "current_max_watermark_value",
@@ -25,7 +27,7 @@
 					"source": {
 						"type": "MySqlSource",
 						"query": {
-							"value": "SELECT * FROM inventory_master\nWHERE last_updated > STR_TO_DATE('@{activity('last_watermark_value').output.firstRow.WatermarkValue}', '%Y-%m-%d %H:%i:%s')\n  AND last_updated <= STR_TO_DATE('@{activity('current_max_watermark_value').output.firstRow.NewWatermarkValue}', '%Y-%m-%d %H:%i:%s');\n\n",
+							"value": "SELECT * FROM inventory_master\nWHERE last_updated > '@{activity('last_watermark_value').output.firstRow.WatermarkValue}'\n  AND last_updated <='@{activity('current_max_watermark_value').output.firstRow.NewWatermarkValue}';\n",
 							"type": "Expression"
 						}
 					},
@@ -135,6 +137,8 @@
 			{
 				"name": "current_max_watermark_value",
 				"type": "Lookup",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "last_watermark_value",
@@ -165,6 +169,8 @@
 			{
 				"name": "last_watermark_value",
 				"type": "Lookup",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
