@@ -1,0 +1,119 @@
+{
+	"name": "mysqlincrimentcopy",
+	"properties": {
+		"activities": [
+			{
+				"name": "mysqlincrimentcopypipeline",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "current_max_watermark_value",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "MySqlSource",
+						"query": {
+							"value": "SELECT * FROM inventory_master\nWHERE YourWatermarkColumn > '@{activity('last_watermark_value').output.firstRow.WatermarkValue}'\nAND YourWatermarkColumn <= '@{activity('current_max_watermark_value').output.firstRow.NewWatermarkValue}';\n",
+							"type": "Expression"
+						}
+					},
+					"sink": {
+						"type": "AzurePostgreSqlSink",
+						"writeBatchSize": 1000000,
+						"writeBatchTimeout": "00:30:00",
+						"writeMethod": "CopyCommand"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "dsmysqlsourceinventorymaster",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dsprogressqlinventorymaster",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "current_max_watermark_value",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "last_watermark_value",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "MySqlSource",
+						"query": "SELECT MAX(watermarkvalue) AS NewWatermarkValue FROM watermarktable;"
+					},
+					"dataset": {
+						"referenceName": "dsmysqlwatermarktable",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "last_watermark_value",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "MySqlSource",
+						"query": "SELECT watermarkvalue FROM watermarktable WHERE TableName = 'inventory_master';"
+					},
+					"dataset": {
+						"referenceName": "dsmysqlwatermarktable",
+						"type": "DatasetReference"
+					}
+				}
+			}
+		],
+		"annotations": []
+	}
+}
