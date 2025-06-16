@@ -156,7 +156,7 @@
 			"properties": {
 				"type": "SelfHosted",
 				"typeProperties": {
-					"selfContainedInteractiveAuthoringEnabled": true
+					"selfContainedInteractiveAuthoringEnabled": false
 				}
 			},
 			"dependsOn": []
@@ -572,6 +572,46 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/dsmysqlsourceinventorymaster')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lnkMySqlonpremsource",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "MySqlTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "`inventory_master`"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lnkMySqlonpremsource')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dsmysqlwatermarktable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lnkMySqlonpremsource",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "MySqlTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "`watermarktable`"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lnkMySqlonpremsource')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/dspostgresazure')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -746,361 +786,61 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/df_json_transpose')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
+			"name": "[concat(parameters('factoryName'), '/dsprogressqlinventorymaster')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"type": "MappingDataFlow",
+				"linkedServiceName": {
+					"referenceName": "lnkPostgreSqlAzure",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzurePostgreSqlTable",
+				"schema": [
+					{
+						"name": "item_id",
+						"type": "integer",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "product_name",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "category",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "quantity",
+						"type": "integer",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "price",
+						"type": "numeric",
+						"precision": 10,
+						"scale": 2
+					},
+					{
+						"name": "last_updated",
+						"type": "timestamp without time zone",
+						"precision": 0,
+						"scale": 0
+					}
+				],
 				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_jsonsource",
-								"type": "DatasetReference"
-							},
-							"name": "jsonsourcefiles"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "dsjsontransformedtocsv",
-								"type": "DatasetReference"
-							},
-							"name": "copyingtocsvfiles"
-						}
-					],
-					"transformations": [
-						{
-							"name": "flattenjsonfile"
-						}
-					],
-					"scriptLines": [
-						"parameters{",
-						"     fileDate as string (concat(\"Biju\",\"raj\"))",
-						"}",
-						"source(output(",
-						"          id as string,",
-						"          name as string,",
-						"          category as string,",
-						"          price as double,",
-						"          rating as double,",
-						"          inStock as boolean,",
-						"          features as string[]",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     documentForm: 'arrayOfDocuments') ~> jsonsourcefiles",
-						"jsonsourcefiles foldDown(unroll(features),",
-						"     mapColumn(",
-						"          id,",
-						"          name,",
-						"          category,",
-						"          price,",
-						"          rating,",
-						"          inStock,",
-						"          features",
-						"     ),",
-						"     skipDuplicateMapInputs: false,",
-						"     skipDuplicateMapOutputs: false) ~> flattenjsonfile",
-						"flattenjsonfile sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     umask: 0022,",
-						"     preCommands: [],",
-						"     postCommands: [],",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> copyingtocsvfiles"
-					]
+					"schema": "public",
+					"table": "inventory_master"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_jsonsource')]",
-				"[concat(variables('factoryId'), '/datasets/dsjsontransformedtocsv')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Copy nested json to csv')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "df_json_to_csv",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "df_json_transpose",
-								"type": "DataFlowReference",
-								"parameters": {
-									"fileDate": "concat(\"Biju\",\"raj\")"
-								},
-								"datasetParameters": {
-									"jsonsourcefiles": {},
-									"copyingtocsvfiles": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/df_json_transpose')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Copy_Inventory_Incremental_Upsert')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "copyinventorystagingtable",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "LookupOldWatermark",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "MySqlSource",
-								"query": {
-									"value": "SELECT\n    item_id,\n    product_name,\n    category,\n    quantity,\n    price,\n    last_updated\nFROM\n    inventory\nWHERE\n    last_updated > CURDATE() - INTERVAL 1 DAY\nORDER BY last_updated ASC;\n",
-									"type": "Expression"
-								}
-							},
-							"sink": {
-								"type": "AzurePostgreSqlSink",
-								"writeBatchSize": 1000000,
-								"writeBatchTimeout": "00:30:00",
-								"preCopyScript": "truncate table inventory_staging ",
-								"writeMethod": "CopyCommand"
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "item_id",
-											"type": "Int32",
-											"physicalType": "Int32"
-										},
-										"sink": {
-											"name": "item_id",
-											"type": "Int32",
-											"physicalType": "integer"
-										}
-									},
-									{
-										"source": {
-											"name": "product_name",
-											"type": "String",
-											"physicalType": "VarChar"
-										},
-										"sink": {
-											"name": "product_name",
-											"type": "String",
-											"physicalType": "character varying"
-										}
-									},
-									{
-										"source": {
-											"name": "category",
-											"type": "String",
-											"physicalType": "VarChar"
-										},
-										"sink": {
-											"name": "category",
-											"type": "String",
-											"physicalType": "character varying"
-										}
-									},
-									{
-										"source": {
-											"name": "quantity",
-											"type": "Int32",
-											"physicalType": "Int32"
-										},
-										"sink": {
-											"name": "quantity",
-											"type": "Int32",
-											"physicalType": "integer"
-										}
-									},
-									{
-										"source": {
-											"name": "price",
-											"type": "Decimal",
-											"physicalType": "NewDecimal"
-										},
-										"sink": {
-											"name": "price",
-											"type": "Decimal",
-											"physicalType": "numeric"
-										}
-									},
-									{
-										"source": {
-											"name": "last_updated",
-											"type": "DateTime",
-											"physicalType": "Timestamp"
-										},
-										"sink": {
-											"name": "last_updated",
-											"type": "DateTime",
-											"physicalType": "timestamp without time zone"
-										}
-									}
-								],
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "dsMySqlonpremsource",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "dspostgrestagingazure",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "LookupOldWatermark",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzurePostgreSqlSource",
-								"query": "SELECT watermarkvalue FROM public.watermarktable WHERE tablename = 'inventory';",
-								"partitionOption": "None",
-								"queryTimeout": "02:00:00"
-							},
-							"dataset": {
-								"referenceName": "dspostgresazure",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "Copy incrimental data to finaltable",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "copyinventorystagingtable",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzurePostgreSqlSource",
-								"partitionOption": "None",
-								"queryTimeout": "02:00:00"
-							},
-							"sink": {
-								"type": "AzurePostgreSqlSink",
-								"writeBatchSize": 1000000,
-								"writeBatchTimeout": "00:30:00",
-								"preCopyScript": "INSERT INTO public.inventory (item_id, product_name, category, quantity, price, last_updated)\nSELECT\n    stg.item_id,\n    stg.product_name,\n    stg.category,\n    stg.quantity,\n    stg.price,\n    stg.last_updated\nFROM\n    public.inventory_staging AS stg\nON CONFLICT (item_id) DO UPDATE SET \n    product_name = EXCLUDED.product_name,\n    category = EXCLUDED.category,\n    quantity = EXCLUDED.quantity,\n    price = EXCLUDED.price,\n    last_updated = EXCLUDED.last_updated;\n\n\nTRUNCATE TABLE public.inventory_staging;\nupdate public.watermarktable set watermarkvalue=NOW()\n",
-								"writeMethod": "CopyCommand"
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "dspostgresstagingtable",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "dspostgrestagingazure",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/dsMySqlonpremsource')]",
-				"[concat(variables('factoryId'), '/datasets/dspostgrestagingazure')]",
-				"[concat(variables('factoryId'), '/datasets/dspostgresazure')]",
-				"[concat(variables('factoryId'), '/datasets/dspostgresstagingtable')]"
+				"[concat(variables('factoryId'), '/linkedServices/lnkPostgreSqlAzure')]"
 			]
 		}
 	]
