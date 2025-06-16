@@ -2,6 +2,7 @@
 	"name": "migrationIR",
 	"properties": {
 		"type": "SelfHosted",
+		"description": "wwerw",
 		"typeProperties": {
 			"selfContainedInteractiveAuthoringEnabled": false
 		}
