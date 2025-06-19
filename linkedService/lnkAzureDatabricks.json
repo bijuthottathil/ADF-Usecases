@@ -7,7 +7,7 @@
 			"domain": "https://adb-2058598773075952.12.azuredatabricks.net",
 			"authentication": "MSI",
 			"workspaceResourceId": "/subscriptions/e3fe7a24-7f96-4d9e-bb03-a60836b78bbb/resourceGroups/rs-databricks/providers/Microsoft.Databricks/workspaces/ws-databricks-dev",
-			"existingClusterId": "https://adb-2058598773075952.12.azuredatabricks.net/"
+			"existingClusterId": "0619-134413-d4o4ht82"
 		},
 		"connectVia": {
 			"referenceName": "migrationIR",
