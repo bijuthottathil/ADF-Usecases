@@ -1,0 +1,12 @@
+{
+	"name": "ds_sqldestination",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_sql",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlMITable",
+		"schema": []
+	}
+}

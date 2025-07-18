@@ -1,0 +1,105 @@
+{
+	"name": "JoinCustomersOrders",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_csv_customers",
+						"type": "DatasetReference"
+					},
+					"name": "srccustomers"
+				},
+				{
+					"dataset": {
+						"referenceName": "s_csv_products",
+						"type": "DatasetReference"
+					},
+					"name": "srcproducts"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_csv_orders",
+						"type": "DatasetReference"
+					},
+					"name": "srcorders"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sqldestination",
+						"type": "DatasetReference"
+					},
+					"name": "sqldestination"
+				}
+			],
+			"transformations": [
+				{
+					"name": "joincustomersorders"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "totalvalue"
+				},
+				{
+					"name": "aggregate1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          customer_id as string,",
+				"          customer_name as string,",
+				"          country as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> srccustomers",
+				"source(output(",
+				"          product_id as string,",
+				"          product_name as string,",
+				"          price as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> srcproducts",
+				"source(output(",
+				"          order_id as string,",
+				"          customer_id as string,",
+				"          product_id as string,",
+				"          quantity as string,",
+				"          order_date as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> srcorders",
+				"srccustomers, srcorders join(srccustomers@customer_id == srcorders@customer_id,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joincustomersorders",
+				"srcproducts, joincustomersorders join(srcproducts@product_id == srcorders@product_id,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"join2 derive(order_value = toInteger(quantity)* toInteger(price)) ~> totalvalue",
+				"totalvalue aggregate(groupBy(customer_name),",
+				"     order_value = sum(order_value)) ~> aggregate1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sqldestination"
+			]
+		}
+	}
+}
